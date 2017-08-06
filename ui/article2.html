@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <head>
+        <link href="/ui/style.css" rel="stylesheet" />
+    </head>
+
+    <script type="text/javascript" src="/ui/main.js">
+    </script>
+
+    <body>
+      <a href="/">Home</a>
+      <hr>
+
+        <p>
+          This page exists to test URL based file redirection.
+        </p>
+
+      <div class="cosmo text-color">
+        <p>
+          A few CentOS Linux systems administration notes for you to chew on.
+        </p>
+
+        <hr>
+
+        <p>
+          Here's one way to prevent users from invoking 'su -' and at the same time
+          enabling them to use sudo.
+        </p>
+
+        <p>
+          Edit /etc/pam.d/su . Near the top of the file, right after
+          the line 'auth sufficient pam_rootok.so' , add this line
+        </p>
+
+        <p class="sysadmin-text">
+            &nbsp;&nbsp;&nbsp;&nbsp; auth        requisite   pam_deny.so
+        </p>
+
+        <p>
+          Edit the /etc/sudoers file (typically using visudo).
+          After this line
+        </p>
+
+        <p class="sysadmin-text">
+            &nbsp;&nbsp;&nbsp;&nbsp; root    ALL=(ALL)   ALL
+        </p>
+
+        <p>
+          Add entries for either individual users or for a group <br>
+          eg.
+        </p>
+
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; me      ALL=(ALL)   ALL           <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; gabbar  ALL=(ALL) NOPASSWD:  ALL  <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; %cansudo  ALL=(ALL)   ALL         <br>
+        </p>
+
+          (if the above does not apply for all users, then)          <br>
+
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; ALL ALL=(ALL) ALL
+        </p>
+        
+        <p>
+          To enable logging, add the following lines, if they don't exist already.
+        </p>
+
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; Defaults iolog_dir=/var/log/sudo/sudo-io/%{user}  <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; ...                                               <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; ...                                               <br><br>
+
+          &nbsp;&nbsp;&nbsp;&nbsp; %cansudo      ALL=(ALL) LOG_INPUT: LOG_OUTPUT:   ALL
+        </p>
+
+        <p>
+          Save and exit visudo.
+        </p>
+
+        <hr>
+
+      </div>
+
+    </body>
+</html>

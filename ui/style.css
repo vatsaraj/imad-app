@@ -1,7 +1,6 @@
 body {
     font-family: sans-serif;
-    # background-color: lightgrey;
-    background-color: azure;
+    # background-color: lightsalmon;
     margin-top: 75px;
 }
 
@@ -13,6 +12,10 @@ body {
     font-size: 300%;
 }
 
+.text-color {
+    color: #394646;
+}
+
 .bold {
     font-weight: bold;
 }
@@ -21,3 +24,18 @@ body {
     height: 200px;
 }
 
+.img-128x128 {
+    height: 128px;
+    width:  128px;
+}
+
+.cosmo {
+    margin:           5px 5px;
+    background-color: seashell;
+    font-family:      sans-serif;
+}
+
+.sysadmin-text {
+  font-family : courier;
+  color       : #000000;
+}
