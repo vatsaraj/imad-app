@@ -5,29 +5,51 @@
         <link href="/ui/style.css" rel="stylesheet" />
     </head>
 
-    <script type="text/javascript" src="/ui/main.js">
+    <script>
+      <!-- alert('This annoying popup will inform you that we\'re running JavaScript here ;-)'); -->
     </script>
 
     <body>
       <div class="cosmo">
         <div class="center">
-          <p>
-            <img src="/ui/aloha.png" class="img-128x128" />
-          </p>
+            <img id="aloha-pic" src="/ui/aloha.png" class="img-128x128" />
         </div>
         <br>
-        <div class="center text-big bold text-color">
-          <p>
-            Hey! Thanks for dropping by.
-          </p>
-            <hr>
-          <p>
-            <h6>Adding more stuff behind the scenes.
-                Will be back soon...
-            </h6>
-            <hr>
-          </p>
+        <div id="greet-text" class="center text-big bold text-color">
+            Hey! Thanks for stopping by.
         </div>
+        <hr>
+        <p>
+        <div id="whoami-text" class="text-medium">
+          I'm Vatsaraj and this is my first webapp.
+          <hr>
+        </div>
+        <div id="ramblings-text" class="text-normal bold">
+          This webpage demonstrates certain exercises performed as part of the NPTEL course on "Introduction to Modern Application Development". <br>
+        </div>
+        <div id="describe-text" class="text-normal">
+          As you can see, there is a "favicon" on the left side of the tab of this page.<br>
+          There's a logo and a greetings message neatly centered. The logo itself is a transparent PNG file.<br>
+          There's a short introduction with my name and what this page is meant for.
+          Below this page are THREE other pages which can be accessed by appending /article1 or /article2 or /article3 to the main URL. These pages are an exercise on how URL redirection works. <br>
+          Under the hood, this page is optimized for convenient view via a portable device like a mobilel phone or tablet etc. <br>
+          <hr>
+          Don't touch this frog, else it'll jump.
+          <img id="frog-pic" src="/ui/frog_right.png" align="top">
+          <br>
+          <div align="right">
+            <img id="queasy-pic" src="/ui/face1.png" onmouseover="queasyMouseOver()" onmouseout="queasyMouseOut()"/>Careful! This chap gets queasy when you tap him or hover over him...
+          </div>
+        </div>
+        <div class="text-sub-normal">
+          <hr>
+          <p class="center">
+            - MMXVII -
+          <hr>
+        </div>
+        </p>
       </div>
     </body>
+
+    <script type="text/javascript" src="/ui/main.js"></script>
 </html>

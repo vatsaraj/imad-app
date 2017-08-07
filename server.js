@@ -25,6 +25,26 @@ app.get('/favicon.ico', function (req, res) {
   res.sendFile(path.join(__dirname, './', 'favicon.ico'));
 });
 
+app.get('/ui/main.js', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'main.js'));
+});
+
+app.get('/ui/frog_right.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'frog_right.png'));
+});
+
+app.get('/ui/frog_left.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'frog_left.png'));
+});
+
+app.get('/ui/face1.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'face1.png'));
+});
+
+app.get('/ui/face2.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'face2.png'));
+});
+
 var articles = {
   article1: {
     title:   'Article One | Vatsaraj',

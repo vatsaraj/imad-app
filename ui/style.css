@@ -40,3 +40,15 @@ body {
   font-family : courier;
   color       : #000000;
 }
+
+.text-medium {
+  font-size: 200%;
+}
+
+.text-normal {
+  font-size: 100%;
+}
+
+.text-sub-normal {
+  font-size: 70%;
+}
