@@ -45,6 +45,10 @@ app.get('/ui/face2.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'face2.png'));
 });
 
+app.get('/ui/snowman.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'snowman.png'));
+});
+
 var articles = {
   article1: {
     title:   'Article One | Vatsaraj',
@@ -146,7 +150,7 @@ var articles = {
   article3: {
     title:   'Article Three | Vatsaraj',
     heading: 'Article 3',
-    content: 'There\'s no such article as Article3'
+    content: 'Aha.. gotcha... There\'s no such article as Article3. (heh heh heh...)'
   }
 };  // End 'articles'
 

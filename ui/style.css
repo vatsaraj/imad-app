@@ -52,3 +52,8 @@ body {
 .text-sub-normal {
   font-size: 70%;
 }
+
+.sublime-text {
+  font-family: georgia;
+  color: #878787;
+}

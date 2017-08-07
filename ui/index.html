@@ -28,22 +28,52 @@
           This webpage demonstrates certain exercises performed as part of the NPTEL course on "Introduction to Modern Application Development". <br>
         </div>
         <div id="describe-text" class="text-normal">
-          As you can see, there is a "favicon" on the left side of the tab of this page.<br>
-          There's a logo and a greetings message neatly centered. The logo itself is a transparent PNG file.<br>
-          There's a short introduction with my name and what this page is meant for.
-          Below this page are THREE other pages which can be accessed by appending /article1 or /article2 or /article3 to the main URL. These pages are an exercise on how URL redirection works. <br>
-          Under the hood, this page is optimized for convenient view via a portable device like a mobilel phone or tablet etc. <br>
+        <p>
+          There's a logo and a greetings message neatly centered. The logo itself is a transparent PNG file.
+        </p>
+        <p>
+          There's also a short introduction with my name and what this page is meant for.
+        </p>
+        <p>
+          As you can see, there is a "favicon" on the left side of the tab, at the top of this page. You'll see the same icon when you access child pages of this website.
+        </p>
+          Below this page are THREE other pages which can be accessed by appending <b>/article1</b> or <b>/article2</b> or <b>/article3</b> to the main URL. <br>
+          Alternatively you could click on
+          <a href="javascript:void(0)" onclick="loadArticle(1)">/article1</a>,
+          <a href="javascript:void(0)" onclick="loadArticle(2)">/article2</a>,
+          <a href="javascript:void(0)" onclick="loadArticle(3)">/article3</a>
+          to get there. The URLs are constructed using the 'location' object in JavaScript.
+          <br>
+          These pages are an exercise on how URL redirection works. <br>
+        <p>
+          Under the hood, this page is optimized for convenient view via a portable device like a mobile phone or tablet etc. Check it out in your mobile phone or tablet.
+        </p>
           <hr>
+          <div>
+            <p>
+              Here are a few fun stuff done while going through this course... <br>
+            </p>
+          </div>
+
           Don't touch this frog, else it'll jump.
           <img id="frog-pic" src="/ui/frog_right.png" align="top">
-          <br>
           <div align="right">
-            <img id="queasy-pic" src="/ui/face1.png" onmouseover="queasyMouseOver()" onmouseout="queasyMouseOut()"/>Careful! This chap gets queasy when you tap him or hover over him...
+          <p>
+            <img id="queasy-pic" src="/ui/face1.png" onmouseover="queasyMouseOver()" onmouseout="queasyMouseOut()"/>Careful! This chap gets queasy when you tap him or hover over him... <br>
+          </p>
+          </div>
+          <div>
+            <p>
+            Tap on the snowman to make him shiver in the cold... &nbsp;
+            <img id="snowman-pic" src="/ui/snowman.png" align="bottom" onclick="snowmanShiver()"/>
+            &nbsp; and tap him again to stop him from shivering.
+            </p>
           </div>
         </div>
         <div class="text-sub-normal">
           <hr>
           <p class="center">
+            Visit this website's github page <a href="https://github.com/vatsaraj/imad-app">here</a>. <br>
             - MMXVII -
           <hr>
         </div>
