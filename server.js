@@ -17,17 +17,153 @@ app.get('/ui/aloha.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'aloha.png'));
 });
 
-
-app.get('/article1', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'article1.html'));
+app.get('/ui/pittedpaper.png', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'pittedpaper.png'));
 });
 
-app.get('/article2', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'article2.html'));
+app.get('/favicon.ico', function (req, res) {
+  res.sendFile(path.join(__dirname, './', 'favicon.ico'));
 });
 
-app.get('/article3', function (req, res) {
-  res.send('There\'s no such article called \"Article 3\".');
+var articles = {
+  article1: {
+    title:   'Article One | Vatsaraj',
+    heading: 'Article 1',
+    content: `
+      <p>
+        This is a test page to see how multiple lines of text are rendered in a browser
+        running on a desktop/laptop and a mobile device like a smart phone or a tablet.
+      </p>
+
+      <div class="cosmo text-color">
+        <p>
+          Listed below are the names of a few countries.
+        </p>
+        <hr>
+        <p>
+          Iceland, India, Indonesia, Iran, Iraq, Ireland, Israel, Italy
+        </p>
+        <hr>
+        <p>
+          Macau, Macedonia, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, Marshall Islands, Mauritania, Mauritius, Mexico, Micronesia, Moldova, Monaco, Mongolia, Montenegro, Morocco, Mozambique
+        </p>
+        <hr>
+        <p>
+          Saint Kitts and Nevis, Saint Lucia, Saint Vincent and the Grenadines, Samoa, San Marino, Sao Tome and Principe, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Sint Maarten, Slovakia, Slovenia, Solomon Islands, Somalia, South Africa, South Korea, South Sudan, Spain, Sri Lanka, Sudan, Suriname, Swaziland, Sweden, Switzerland, Syria
+        </p>
+        <hr>
+        <p>
+          Gabon, Gambia, Georgia, Germany, Ghana, Greece, Grenada, Guatemala, Guinea, Guinea-Bissau, Guyana
+        </p>
+        <hr>
+        <p>
+          East Timor, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Ethiopia
+        </p>
+        <hr>
+      </div>
+      `
+  },
+  article2: {
+    title:   'Article Two | Vatsaraj',
+    heading: 'Article 2',
+    content: `
+      <p>
+        This page exists to test URL based redirection.
+      </p>
+
+      <div class="cosmo text-color">
+        <p>
+          A few CentOS Linux systems administration notes for you to chew on.
+        </p>
+        <hr>
+        <p>
+          Here's one way to prevent users from invoking 'su -' and at the same time
+          enabling them to use sudo.
+        </p>
+        <p>
+          Edit /etc/pam.d/su . Near the top of the file, right after
+          the line 'auth sufficient pam_rootok.so' , add this line
+        </p>
+        <p class="sysadmin-text">
+            &nbsp;&nbsp;&nbsp;&nbsp; auth        requisite   pam_deny.so
+        </p>
+        <p>
+          Edit the /etc/sudoers file (typically using visudo).
+          After this line
+        </p>
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; root    ALL=(ALL)   ALL
+        </p>
+        <p>
+          Add entries for either individual users or for a group <br>
+          eg.
+        </p>
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; me      ALL=(ALL)   ALL           <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; gabbar  ALL=(ALL) NOPASSWD:  ALL  <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; %cansudo  ALL=(ALL)   ALL         <br>
+        </p>
+          (if the above does not apply for all users, then)          <br>
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; ALL ALL=(ALL) ALL
+        </p>
+        <p>
+          To enable logging, add the following lines, if they don't exist already.
+        </p>
+        <p class="sysadmin-text">
+          &nbsp;&nbsp;&nbsp;&nbsp; Defaults iolog_dir=/var/log/sudo/sudo-io/%{user}  <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; ...                                               <br>
+          &nbsp;&nbsp;&nbsp;&nbsp; ...                                               <br><br>
+          &nbsp;&nbsp;&nbsp;&nbsp; %cansudo      ALL=(ALL) LOG_INPUT: LOG_OUTPUT:   ALL
+        </p>
+        <p>
+          Save and exit visudo.
+        </p>
+        <hr>
+      </div>
+    `
+  },
+  article3: {
+    title:   'Article Three | Vatsaraj',
+    heading: 'Article 3',
+    content: 'There\'s no such article as Article3'
+  }
+};  // End 'articles'
+
+function createHtmlTemplate(data) {
+  var title   = data.title;
+  var heading = data.heading;
+  var content = data.content;
+
+  var htmlTemplate = `
+    <html>
+      <head>
+        <title>
+          ${title}
+        </title>
+        <meta content='width=device-width, initial-scale=1' name='viewport'/>
+        <link href="ui/style.css" rel="stylesheet">
+      </head>
+      <body>
+        <div>
+          <a href="/">HOME</a>
+        </div>
+        <div>
+          <h3>${heading}</h3>
+        </div>
+
+        ${content}
+
+      </body>
+    </html>`;
+
+  return htmlTemplate;
+}
+  
+
+app.get('/:articleName', function (req, res) {
+  var articleName = req.params.articleName;
+  res.send(createHtmlTemplate(articles[articleName]));
 });
 
 

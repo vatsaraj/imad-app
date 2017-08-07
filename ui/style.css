@@ -1,7 +1,8 @@
 body {
     font-family: sans-serif;
     # background-color: lightsalmon;
-    margin-top: 75px;
+    # margin-top: 75px;
+    background-image: url("/ui/pittedpaper.png");
 }
 
 .center {
