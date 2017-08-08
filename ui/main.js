@@ -85,11 +85,29 @@ function loadArticle(which) {
 }
 
 
-// Button click counter.
-var counter = 0;
-var count  = document.getElementById('count');
+// Button click counter v2.
 var button = document.getElementById('counter');
 button.onclick = function() {
-  counter = counter + 1;
-  count.innerHTML = counter.toString();
+
+  // Create the request object.
+  var request = new XMLHttpRequest();
+
+  // Capture and analyze the response.
+  request.onreadystatechange = function() {
+    // Do something only if we are ready.
+    if(request.readyState == XMLHttpRequest.DONE) {
+
+      // Did the request succeed?
+      if(request.status == 200) {
+        var counter = request.responseText;
+        var span = document.getElementById('count');
+        span.innerHTML = counter.toString();
+      }
+    }
+  };
+
+  // Make the request.
+  request.open('GET', whereAmI + '/counter', true);
+  request.send(null);
 };
+
