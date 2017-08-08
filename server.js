@@ -49,6 +49,12 @@ app.get('/ui/snowman.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'snowman.png'));
 });
 
+var counter = 0;
+app.get('/counter', function(req, res) {
+  counter = counter+1;
+  res.send(counter.toString());
+});
+
 var articles = {
   article1: {
     title:   'Article One | Vatsaraj',

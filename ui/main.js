@@ -84,3 +84,12 @@ function loadArticle(which) {
   location = whereAmI + '/article' + which;
 }
 
+
+// Button click counter.
+var counter = 0;
+var count  = document.getElementById('count');
+var button = document.getElementById('counter');
+button.onclick = function() {
+  counter = counter + 1;
+  count.innerHTML = counter.toString();
+};
