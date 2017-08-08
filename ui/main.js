@@ -6,18 +6,6 @@ var injection = element.innerHTML + '<div class="sublime-text"> <i>THIS LINE WAS
 element.innerHTML = injection;
 
 
-// If you click the image, it will jump right by 100 pixels.
-var aloha = document.getElementById('aloha-pic');
-var marginLeft = 0;
-function aloha_slide_right() {
-  marginLeft = marginLeft + 1;
-  aloha.style.marginLeft = marginLeft + 'px';
-}
-
-aloha.onclick = function() {
-  var interval = setInterval(aloha_slide_right, 50);
-};
-
 // Make a frog hop around.
 var frogXPos = 0;
 var frogDir = "right";
