@@ -111,3 +111,38 @@ button.onclick = function() {
   request.send(null);
 };
 
+
+// Name lister.
+var submit = document.getElementById('submit');
+submit.onclick = function() {
+  // Extract the name.
+  var request = new XMLHttpRequest();
+  
+  // Capture and analyze the response.
+  request.onreadystatechange = function() {
+    // Do something only if we are ready.
+    if(request.readyState == XMLHttpRequest.DONE) {
+
+      // Did the request succeed?
+      if(request.status == 200) {
+        var list = [];
+        // var names = JSON.parse(request.responseText);
+        var names = request.responseText;
+        names = JSON.parse(names);
+        for(var ixx = 0; ixx < names.length; ixx++) {
+          list += '<li>' + names[ixx] + '</li>';
+        }
+        var ul = document.getElementById('listofnames');
+        ul.innerHTML = list;
+      }
+    }
+  };
+
+
+  // Make the request.
+  var inputBox = document.getElementById('name');
+  var newname = inputBox.value;
+  request.open('GET', whereAmI + '/submit-name?name='+newname, true);
+  request.send(null);
+
+};
