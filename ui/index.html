@@ -1,25 +1,26 @@
 <!doctype html>
 <html>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
-    <head>
-        <link href="/ui/style.css" rel="stylesheet" />
-    </head>
+  <head>
+    <link href="/ui/style.css" rel="stylesheet" />
+  </head>
 
-    <script>
-      <!-- alert('This annoying popup will inform you that we\'re running JavaScript here ;-)'); -->
-    </script>
+  <script>
+    <!-- Uncomment the following like of HTML code, if you want to distribute some perpetual annoyance. -->
+    <!-- alert('This annoying popup is to inform you that we\'re running JavaScript here ;-)'); -->
+  </script>
 
-    <body>
-      <div class="cosmo">
-        <div class="center">
-            <img id="aloha-pic" src="/ui/aloha.png" class="img-128x128" />
-        </div>
-        <br>
-        <div id="greet-text" class="center text-big bold text-color">
-            Hey! Thanks for stopping by.
-        </div>
-        <hr>
-        <p>
+  <body>
+    <div class="cosmo">
+      <div class="center">
+        <img id="aloha-pic" src="/ui/aloha.png" class="img-128x128" />
+      </div>
+      <br>
+      <div id="greet-text" class="center text-big bold text-color">
+        Hey! Thanks for stopping by.
+      </div>
+      <hr>
+      <p>
         <div id="whoami-text" class="text-medium">
           I'm Vatsaraj and this is my first webapp.
           <hr>
@@ -28,15 +29,15 @@
           This webpage demonstrates certain exercises performed as part of the NPTEL course on "Introduction to Modern Application Development". <br>
         </div>
         <div id="describe-text" class="text-normal">
-        <p>
-          There's a logo and a greetings message neatly centered. The logo is a transparent PNG file and it's made with <a href="https://www.gimp.org">GIMP</a>
-        </p>
-        <p>
-          There's also a short introduction with my name and what this page is meant for.
-        </p>
-        <p>
-          As you can see, there is a "favicon" on the left side of the tab, at the top of this page. You'll see the same icon when you access child pages of this website.
-        </p>
+          <p>
+            There's a logo and a greetings message neatly centered. The logo is a transparent PNG file and it's made with <a href="https://www.gimp.org">GIMP</a>
+          </p>
+          <p>
+            There's also a short introduction with my name and what this page is meant for.
+          </p>
+          <p>
+            As you can see, there is a "favicon" on the left side of the tab, at the top of this page. You'll see the same icon when you access child pages of this website.
+          </p>
           Below this page are THREE other pages which can be accessed by appending <b>/article1</b> or <b>/article2</b> or <b>/article3</b> to the main URL. <br>
           Alternatively you could click on
           <a href="javascript:void(0)" onclick="loadArticle(1)">/article1</a>,
@@ -45,41 +46,44 @@
           to get there. The URLs are constructed using the 'location' object in JavaScript.
           <br>
           These pages are an exercise on how URL redirection works. <br>
-        <p>
-          Under the hood, this page is optimized for convenient view via a portable device like a mobile phone or tablet etc. Check it out in your mobile phone or tablet.
-        </p>
+          <p>
+            Under the hood, this page is optimized for convenient view via a portable device like a mobile phone or tablet etc. Check it out for yourself.
+          </p>
           <hr>
           <div>
-            <p>
-              Here are a few fun stuff done while going through this course... <br>
-            </p>
-          </div>
+          <p>
+            Here are a few fun stuff done while going through this course... <br>
+          </p>
+        </div>
 
-          Don't touch this frog, else it'll jump.
-          <img id="frog-pic" src="/ui/frog_right.png" align="top">
-          <div align="right">
+        Don't touch this frog, else it'll jump.
+        <img id="frog-pic" src="/ui/frog_right.png" align="top">
+        <div align="right">
           <p>
             <img id="queasy-pic" src="/ui/face1.png" onmouseover="queasyMouseOver()" onmouseout="queasyMouseOut()"/>Careful! This chap gets queasy when you tap him or hover over him... <br>
           </p>
-          </div>
-          <div>
-            <p>
+        </div>
+        <div>
+          <p>
             This snowman starts shivering when you tap him... &nbsp;
             <img id="snowman-pic" src="/ui/snowman.png" align="bottom" onclick="snowmanShiver()"/>
             &nbsp; ...and stops when you tap him again.
-            </p>
-          </div>
+          </p>
         </div>
-        <div class="text-sub-normal">
+      </div>
+      <div class="text-sub-normal">
+        <hr>
+        <p class="center">
+          Visit this website's github page <a href="https://github.com/vatsaraj/imad-app">here</a>. <br>
+          - MMXVII -
           <hr>
-          <p class="center">
-            Visit this website's github page <a href="https://github.com/vatsaraj/imad-app">here</a>. <br>
-            - MMXVII -
-          <hr>
-        </div>
         </p>
       </div>
-    </body>
-
+    </div>
+    
     <script type="text/javascript" src="/ui/main.js"></script>
+
+  </body>
+
 </html>
+
