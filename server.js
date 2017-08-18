@@ -1,7 +1,8 @@
 var express = require('express');
-var morgan = require('morgan');
-var path = require('path');
-var Pool = require('pg').Pool;
+var morgan  = require('morgan');
+var path    = require('path');
+var os      = require('os');
+var Pool    = require('pg').Pool;
 
 var app = express();
 app.use(morgan('combined'));
@@ -48,6 +49,10 @@ app.get('/ui/face2.png', function (req, res) {
 
 app.get('/ui/snowman.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'snowman.png'));
+});
+
+app.get('/pat', function(req, res) {
+  res.send(os.hostname());
 });
 
 function createHtmlTemplate(data) {
