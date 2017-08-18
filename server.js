@@ -91,7 +91,7 @@ var config = {
   database: process.env.DB_DATABASE,
   host:     process.env.DB_HOST,
   port:     process.env.DB_PORT,
-  password: process.end.DB_PASSWORD
+  password: process.env.DB_PASSWORD
 };
 
 function printThreadPage(content) {
