@@ -132,12 +132,12 @@ function printChatter(title, heading, content) {
   var ooh = '';
 
   for(var line in content) {
-    ooh += '<div><h5><b>' + content[line].date + '</b></h5></div>' + '<b><i>' + content[line].user + '</i>: </b>' + content[line].text + '<hr>';
+    ooh += '<div><h5><b>' + content[line].date.toLocaleString() + '</b></h5></div>' + '<b><i>' + content[line].user + '</i>: </b>' + content[line].text + '<hr>';
   }
 
   var nineYards = {
     title   : title,
-    heading : heading,
+    heading : '<a href=\"/chat\">Chat</a> forum<hr>',
     content : ooh
   };
 
@@ -159,7 +159,7 @@ app.get('/:chatName', function(req, res) {
       if(result.rows.length === 0) {
         var nineYards = {
           title   : htmlLeafPage,
-          heading : '',
+          heading : '<a href=\"/chat\">Chat</a> forum<hr>',
           content : '<h2>No such conversation found.</h2>'
         };
         res.status(404).send(createHtmlTemplate(nineYards));
@@ -175,7 +175,7 @@ app.get('/:chatName', function(req, res) {
           if(result.rows.length === 0) {
             var nineYards = {
               title   : htmlLeafPage,
-              heading : '',
+              heading : '<a href=\"/chat\">Chat</a> forum<hr>',
               content : '<h3>Looks like you\'ve stumbled into an empty chat area.<br>Care to be the first one to add your thoughts?</h3>'
             };
             res.status(200).send(createHtmlTemplate(nineYards));
