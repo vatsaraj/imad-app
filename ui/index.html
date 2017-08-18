@@ -12,8 +12,9 @@
 
   <body>
     <div class="cosmo">
+      <!-- COSMO div -->
       <div class="center">
-        <img src="/ui/aloha.png" class="img-128x128" />
+        <img src="/ui/aloha.png" class="img-128x128"/>
       </div>
       <br>
       <div id="greet-text" class="center text-big bold text-color">
@@ -22,13 +23,18 @@
       <hr>
       <p>
         <div id="whoami-text" class="text-medium">
+          <!-- HEADING div. -->
           I'm Vatsaraj and this is my first webapp.
           <hr>
+          <!-- HEADING div. -->
         </div>
         <div id="ramblings-text" class="text-normal bold">
+          <!-- RAMBLINGS div -->
           This webpage demonstrates certain exercises performed as part of the NPTEL course on "Introduction to Modern Application Development". <br>
+          <!-- RAMBLINGS div -->
         </div>
         <div id="describe-text" class="text-normal">
+          <!-- DESCRIBE div -->
           <p>
             There's a logo and a greetings message neatly centered. The logo is a transparent PNG file and it's made with <a href="https://www.gimp.org">GIMP</a>
           </p>
@@ -38,14 +44,6 @@
           <p>
             As you can see, there is a "favicon" on the left side of the tab, at the top of this page. You'll see the same icon when you access child pages of this website.
           </p>
-          Below this page are THREE other pages which can be accessed by appending <b>/article1</b> or <b>/article2</b> or <b>/article3</b> to the main URL. <br>
-          Alternatively you could click on
-          <a href="javascript:void(0)" onclick="loadArticle(1)">/article1</a>,
-          <a href="javascript:void(0)" onclick="loadArticle(2)">/article2</a>,
-          <a href="javascript:void(0)" onclick="loadArticle(3)">/article3</a>
-          to get there. The URLs are constructed using the 'location' object in JavaScript.
-          <br>
-          These pages are an exercise on how URL redirection works. <br>
           <p>
             Under the hood, this page is optimized for convenient view via a portable device like a mobile phone or tablet etc. Check it out for yourself.
           </p>
@@ -54,44 +52,55 @@
           <p>
             Here are a few fun stuff done while going through this course... <br>
           </p>
+          <!-- DESCRIBE div -->
         </div>
-
-        Don't touch this frog, else it'll jump.
-        <img id="frog-pic" src="/ui/frog_right.png" align="top">
+        <div>
+          <!-- FROG div -->
+          Don't touch this frog, else it'll jump.
+          <img id="frog-pic" src="/ui/frog_right.png" align="top">
+          <!-- FROG div -->
+        </div>
         <div align="right">
+          <!-- QUEASY FACE div -->
           <p>
             <img id="queasy-pic" src="/ui/face1.png" onmouseover="queasyMouseOver()" onmouseout="queasyMouseOut()"/>Careful! This chap gets queasy when you tap him or hover over him... <br>
           </p>
+          <!-- QUEASY FACE div -->
         </div>
         <div>
+          <!-- SHIVERING SNOWMAN div -->
           <p>
             This snowman starts shivering when you tap him... &nbsp;
             <img id="snowman-pic" src="/ui/snowman.png" align="bottom" onclick="snowmanShiver()"/>
             &nbsp; ...and stops when you tap him again.
           </p>
+          <!-- SHIVERING SNOWMAN div -->
         </div>
         <div class="center">
+          <!-- BUTTON CLICK COUNTER div -->
           <p>
             This button <button id='counter'>ClickMe</button> has been clicked <span id='count'>0</span> times since this page has been up.
           </p>
-        </div>
-        <div>
-        <p>
-          <input type="text" id="name" placeholder="Name"></input>
-          <input type="submit" id="submit"></input>
-          <ul id='listofnames'>
-          </ul>
-        </p>
+          <!-- BUTTON CLICK COUNTER div -->
         </div>
       </div>
+      <div>
+        <!-- GO TO THE CHAT PAGE div -->
+        <hr>
+        Click <a href="/chat">here</a> to go to the chat pages. It reads conversations which are stored in POSTGRESQL tables.
+        <!-- GO TO THE CHAT PAGE div -->
+      </div>
       <div class="text-sub-normal">
+        <!-- FOOTER div -->
         <hr>
         <p class="center">
           Visit this website's github page <a href="https://github.com/vatsaraj/imad-app">here</a>. <br>
           - MMXVII -
           <hr>
         </p>
+        <!-- FOOTER div -->
       </div>
+      <!-- COSMO div -->
     </div>
     
     <script type="text/javascript" src="/ui/main.js"></script>

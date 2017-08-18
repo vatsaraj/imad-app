@@ -1,6 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
+var Pool = require('pg').Pool;
 
 var app = express();
 app.use(morgan('combined'));
@@ -49,126 +50,6 @@ app.get('/ui/snowman.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'snowman.png'));
 });
 
-var counter = 0;
-app.get('/counter', function(req, res) {
-  counter = counter+1;
-  res.send(counter.toString());
-});
-
-var names = [];
-app.get('/submit-name', function(req, res) {
-  var name = req.query.name
-
-  names.push(name);
-
-  res.send(JSON.stringify(names));
-});
-
-var articles = {
-  article1: {
-    title:   'Article One | Vatsaraj',
-    heading: 'Article 1',
-    content: `
-      <p>
-        This is a test page to see how multiple lines of text are rendered in a browser
-        running on a desktop/laptop and a mobile device like a smart phone or a tablet.
-      </p>
-
-      <div class="cosmo text-color">
-        <p>
-          Listed below are the names of a few countries.
-        </p>
-        <hr>
-        <p>
-          Iceland, India, Indonesia, Iran, Iraq, Ireland, Israel, Italy
-        </p>
-        <hr>
-        <p>
-          Macau, Macedonia, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, Marshall Islands, Mauritania, Mauritius, Mexico, Micronesia, Moldova, Monaco, Mongolia, Montenegro, Morocco, Mozambique
-        </p>
-        <hr>
-        <p>
-          Saint Kitts and Nevis, Saint Lucia, Saint Vincent and the Grenadines, Samoa, San Marino, Sao Tome and Principe, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Sint Maarten, Slovakia, Slovenia, Solomon Islands, Somalia, South Africa, South Korea, South Sudan, Spain, Sri Lanka, Sudan, Suriname, Swaziland, Sweden, Switzerland, Syria
-        </p>
-        <hr>
-        <p>
-          Gabon, Gambia, Georgia, Germany, Ghana, Greece, Grenada, Guatemala, Guinea, Guinea-Bissau, Guyana
-        </p>
-        <hr>
-        <p>
-          East Timor, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Ethiopia
-        </p>
-        <hr>
-      </div>
-      `
-  },
-  article2: {
-    title:   'Article Two | Vatsaraj',
-    heading: 'Article 2',
-    content: `
-      <p>
-        This page exists to test URL based redirection.
-      </p>
-
-      <div class="cosmo text-color">
-        <p>
-          A few CentOS Linux systems administration notes for you to chew on.
-        </p>
-        <hr>
-        <p>
-          Here's one way to prevent users from invoking 'su -' and at the same time
-          enabling them to use sudo.
-        </p>
-        <p>
-          Edit /etc/pam.d/su . Near the top of the file, right after
-          the line 'auth sufficient pam_rootok.so' , add this line
-        </p>
-        <p class="sysadmin-text">
-            &nbsp;&nbsp;&nbsp;&nbsp; auth        requisite   pam_deny.so
-        </p>
-        <p>
-          Edit the /etc/sudoers file (typically using visudo).
-          After this line
-        </p>
-        <p class="sysadmin-text">
-          &nbsp;&nbsp;&nbsp;&nbsp; root    ALL=(ALL)   ALL
-        </p>
-        <p>
-          Add entries for either individual users or for a group <br>
-          eg.
-        </p>
-        <p class="sysadmin-text">
-          &nbsp;&nbsp;&nbsp;&nbsp; me      ALL=(ALL)   ALL           <br>
-          &nbsp;&nbsp;&nbsp;&nbsp; gabbar  ALL=(ALL) NOPASSWD:  ALL  <br>
-          &nbsp;&nbsp;&nbsp;&nbsp; %cansudo  ALL=(ALL)   ALL         <br>
-        </p>
-          (if the above does not apply for all users, then)          <br>
-        <p class="sysadmin-text">
-          &nbsp;&nbsp;&nbsp;&nbsp; ALL ALL=(ALL) ALL
-        </p>
-        <p>
-          To enable logging, add the following lines, if they don't exist already.
-        </p>
-        <p class="sysadmin-text">
-          &nbsp;&nbsp;&nbsp;&nbsp; Defaults iolog_dir=/var/log/sudo/sudo-io/%{user}  <br>
-          &nbsp;&nbsp;&nbsp;&nbsp; ...                                               <br>
-          &nbsp;&nbsp;&nbsp;&nbsp; ...                                               <br><br>
-          &nbsp;&nbsp;&nbsp;&nbsp; %cansudo      ALL=(ALL) LOG_INPUT: LOG_OUTPUT:   ALL
-        </p>
-        <p>
-          Save and exit visudo.
-        </p>
-        <hr>
-      </div>
-    `
-  },
-  article3: {
-    title:   'Article Three | Vatsaraj',
-    heading: 'Article 3',
-    content: 'Aha.. gotcha... There\'s no such article as Article3. (heh heh heh...)'
-  }
-};  // End 'articles'
-
 function createHtmlTemplate(data) {
   var title   = data.title;
   var heading = data.heading;
@@ -198,11 +79,114 @@ function createHtmlTemplate(data) {
 
   return htmlTemplate;
 }
-  
 
-app.get('/:articleName', function (req, res) {
-  var articleName = req.params.articleName;
-  res.send(createHtmlTemplate(articles[articleName]));
+var counter = 0;
+app.get('/counter', function(req, res) {
+  counter = counter+1;
+  res.send(counter.toString());
+});
+
+var config = {
+  user: 'vatsaraj',
+  database: 'vatsaraj',
+  host: 'lapp',
+  port: 5432,
+  password: ''
+};
+
+function printThreadPage(content) {
+  var output = '';
+  var bonda = '';
+
+  for(var ixx in content) {
+    //console.log(content[ixx].topic);
+    bonda = content[ixx].topic;
+    output += '<b><a href=\"' + bonda + '\">' + bonda + '</a><hr>';
+  }
+
+  var nineYards = {
+    title   : 'FORUM',
+    heading : 'CONVERSATIONS',
+    content : output
+  };
+
+  return createHtmlTemplate(nineYards);
+}
+
+var pool = new Pool(config);
+app.get('/chat', function(req, res) {
+  pool.query('select * from threadz order by threadid', function(err, result) {
+    if(err) {
+      res.status(500).send(err.toString());
+    } else {
+      if(result.rows.length === 0) {
+        res.status(404).send('Chat forum not found.');
+      } else {
+        res.send(printThreadPage(result.rows));
+      }
+    }
+  });
+});
+
+function printChatter(title, heading, content) {
+  var ooh = '';
+
+  for(var line in content) {
+    ooh += '<div><h5><b>' + content[line].date + '</b></h5></div>' + '<b><i>' + content[line].user + '</i>: </b>' + content[line].text + '<hr>';
+  }
+
+  var nineYards = {
+    title   : title,
+    heading : heading,
+    content : ooh
+  };
+
+  return createHtmlTemplate(nineYards);
+}
+
+app.get('/:chatName', function(req, res) { 
+  // chatName contains the name of the 'topic' in the table 'threadz'.
+  // Identify the threadid from the 'topic'.
+  // Access all the chats from the table 'chatz' connected with that threadid.
+
+  var htmlLeafPage  = req.params.chatName;
+
+  // Identify the thread id which is an unique id for each chat thread.
+  pool.query('select threadid from threadz where topic = \'' + htmlLeafPage + '\'', function(err, result) {
+    if(err) {
+      res.status(500).send(err.toString());
+    } else {
+      if(result.rows.length === 0) {
+        var nineYards = {
+          title   : htmlLeafPage,
+          heading : '',
+          content : '<h2>No such conversation found.</h2>'
+        };
+        res.status(404).send(createHtmlTemplate(nineYards));
+      } else {
+
+        // Locate all the conversations that are associated with this thread id.
+        var whatsMyThread = result.rows[0].threadid;
+        var queryString = 'select \"date\",\"user\",\"text" from chatz where \"threadid\" = ' + whatsMyThread + ' order by chatid';
+        pool.query(queryString, function(err, result) {
+        if(err) {
+          res.status(500).send(err.toString());
+        } else {
+          if(result.rows.length === 0) {
+            var nineYards = {
+              title   : htmlLeafPage,
+              heading : '',
+              content : '<h3>Looks like you\'ve stumbled into an empty chat area.<br>Care to be the first one to add your thoughts?</h3>'
+            };
+            res.status(200).send(createHtmlTemplate(nineYards));
+          } else {
+            res.status(200).send(printChatter(htmlLeafPage, '', result.rows));
+          }
+        }
+      });
+      }
+    }
+  }); // pool.query('select threadid...
 });
 
 
@@ -213,3 +197,4 @@ var port = 80;
 app.listen(port, function () {
   console.log(`IMAD course app listening on port ${port}!`);
 });
+

@@ -57,3 +57,7 @@ body {
   font-family: georgia;
   color: #878787;
 }
+
+.small-linebreak {
+  line-height: 5px;
+}
