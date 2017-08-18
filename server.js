@@ -1,7 +1,6 @@
 var express = require('express');
 var morgan  = require('morgan');
 var path    = require('path');
-var os      = require('os');
 var Pool    = require('pg').Pool;
 
 var app = express();
@@ -52,7 +51,7 @@ app.get('/ui/snowman.png', function (req, res) {
 });
 
 app.get('/pat', function(req, res) {
-  res.send(os.hostname());
+  res.send(process.env);
 });
 
 function createHtmlTemplate(data) {
@@ -94,7 +93,7 @@ app.get('/counter', function(req, res) {
 var config = {
   user: 'vatsaraj',
   database: 'vatsaraj',
-  host: 'lapp',
+  host: 'db.imad.hasura-app.io',
   port: 5432,
   password: ''
 };
