@@ -50,10 +50,6 @@ app.get('/ui/snowman.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'snowman.png'));
 });
 
-app.get('/pat', function(req, res) {
-  res.send(process.env);
-});
-
 function createHtmlTemplate(data) {
   var title   = data.title;
   var heading = data.heading;
@@ -91,11 +87,11 @@ app.get('/counter', function(req, res) {
 });
 
 var config = {
-  user: 'vatsaraj',
-  database: 'vatsaraj',
-  host: 'db.imad.hasura-app.io',
-  port: 5432,
-  password: ''
+  user:     process.env.DB_USERNAME,
+  database: process.env.DB_DATABASE,
+  host:     process.env.DB_HOST,
+  port:     process.env.DB_PORT,
+  password: process.end.DB_PASSWORD
 };
 
 function printThreadPage(content) {
