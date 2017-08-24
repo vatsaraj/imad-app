@@ -1,10 +1,23 @@
-var express = require('express');
-var morgan  = require('morgan');
-var path    = require('path');
-var Pool    = require('pg').Pool;
+var express    = require('express');
+var morgan     = require('morgan');
+var path       = require('path');
+var Pool       = require('pg').Pool;
+var crypto     = require('crypto');
+var bodyParser = require('body-parser'); // This tells the EXPRESS framework that
+                                         // if there is JSON data received, it will
+                                         // be placed inside 'req.body'.
+var session    = require('express-session'); // Use the EXPRESS SESSION framework to
+                                             // manage user sessions.
 
 var app = express();
 app.use(morgan('combined'));
+app.use(bodyParser.json());
+app.use(session({
+  secret: 'top-secret-encryption-string', // This random string will be used to encrypt cookies.
+  cookie: { maxAge: 1000 * 60 * 60 }, // cookie lifetime in milliseconds.
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
@@ -50,6 +63,14 @@ app.get('/ui/snowman.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'snowman.png'));
 });
 
+app.get('/login.html', function(req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'login.html'));
+});
+
+app.get('/ui/login.js', function(req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'login.js'));
+});
+
 function createHtmlTemplate(data) {
   var title   = data.title;
   var heading = data.heading;
@@ -80,6 +101,19 @@ function createHtmlTemplate(data) {
   return htmlTemplate;
 }
 
+app.get('/check-login', function(req, res) {
+  if(req.session && req.session.auth && req.session.auth.userId) {
+    res.send('You are logged in as ' + req.session.auth.userId.toString());
+  } else {
+    res.send('You are NOT logged in.');
+  }
+});
+
+app.get('/logout', function(req, res) {
+  delete req.session.auth;
+  res.send('You are logged out.');
+});
+
 var counter = 0;
 app.get('/counter', function(req, res) {
   counter = counter+1;
@@ -93,6 +127,30 @@ var config = {
   port:     process.env.DB_PORT,
   password: process.env.DB_PASSWORD
 };
+
+function hashBrowns(passwdConfig) {
+  var hashed = crypto.pbkdf2Sync(passwdConfig.password,
+                                 passwdConfig.essentialSalts,
+                                 passwdConfig.iterations,
+                                 passwdConfig.keylength,
+                                 passwdConfig.digestion);
+
+  return ['pbkdf2', passwdConfig.iterations, passwdConfig.essentialSalts, hashed.toString('hex')].join('$');
+}
+
+app.get('/hash/:input', function(req, res) {
+  var salty        = 'salty-malty';
+  var passwdConfig = { password       : '',
+                       essentialSalts : 'salty-malty-balty',
+                       iterations     : 10000,
+                       keylength      : 512,
+                       digestion      : 'sha512'
+                     };
+
+  config.password  = req.params.input;
+  var hashedString = hashBrowns(passwdConfig);
+  res.send(hashedString);
+});
 
 function printThreadPage(content) {
   var output = '';
@@ -114,6 +172,7 @@ function printThreadPage(content) {
 }
 
 var pool = new Pool(config);
+
 app.get('/chat', function(req, res) {
   pool.query('select * from threadz order by threadid', function(err, result) {
     if(err) {
@@ -188,6 +247,91 @@ app.get('/:chatName', function(req, res) {
     }
   }); // pool.query('select threadid...
 });
+
+function hashBrowns(cfg) {
+  /* Some parameter validation being done. More rigour required. */
+  if((cfg.password       === undefined) ||
+     (cfg.password.trim().length === 0)) { cfg.password       = crypto.randomBytes(16).toString('hex'); }
+  if(cfg.essentialSalts === undefined) { cfg.essentialSalts = crypto.randomBytes(128).toString('hex'); }
+  if((cfg.iterations    === undefined) ||
+     (cfg.iterations    <=  0))        { cfg.iterations     = 10000; }
+  if((cfg.keylength     === undefined) ||
+     (cfg.keylength     <=  64))       { cfg.keylength      = 512; }
+  if(cfg.digestion      === undefined) { cfg.digestion      = 'sha512'; }
+
+  var hashed = crypto.pbkdf2Sync(cfg.password,
+                                 cfg.essentialSalts,
+                                 cfg.iterations,
+                                 cfg.keylength,
+                                 cfg.digestion);
+
+  return ['pbkdf2', cfg.iterations, cfg.essentialSalts, hashed.toString('hex')].join('$');
+}
+
+app.get('/hash/:input', function(req, res) {
+  var salty        = 'salty-malty';
+  var passwdConfig = { password       : '',
+                       essentialSalts : 'salty-malty-balty',
+                       iterations     : 10000,
+                       keylength      : 512,
+                       digestion      : 'sha512'
+                     };
+
+  config.password  = req.params.input;
+  var hashedString = hashBrowns(passwdConfig);
+  res.send(hashedString);
+});
+
+app.post('/create-user', function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  var mittens = { password : password };
+  var hashed  = hashBrowns(mittens);
+
+  //var queryString = 'insert into "users" (username, password) values (\'' + username + '\',\'' + password + '\')';
+
+  pool.query('insert into "user" (username, password) values($1, $2)', [username, hashed], function(err, result) {
+    if(err) {
+      res.status(500).send(err.toString());
+    } else {
+      res.send('User ' + username + ' successfully created');
+    }
+  });
+});
+
+app.post('/login', function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  pool.query('select * from "user" where username = $1',[username], function(err, result) {
+    if(err) {
+      res.status(500).send(err.toString());
+    } else {
+      if(result.rows.length === 0) {
+        res.status(403).send('Invalid username/password');
+      } else {
+        // Match the passwords.
+        var dbString    = result.rows[0].password;
+        var getSalty    = dbString.split('$')[2];
+        var mittens = { password : password, essentialSalts : getSalty };
+        var veryifyPass = hashBrowns(mittens);
+
+        if(veryifyPass === dbString) {
+          // Set the session.
+          req.session.auth = {userId: result.rows[0].id};
+
+          // User credentials are good.
+          res.status(200).send('credentials accepted');
+        } else {
+          // Invalid credentials.
+          res.status(403).send('Invalid username/password');
+        }
+      }
+    }
+  });
+});
+
 
 
 // Do not change port, otherwise your app won't run on IMAD servers
