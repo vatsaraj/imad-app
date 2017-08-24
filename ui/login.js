@@ -1,6 +1,5 @@
 console.log('login');
 
-// This function loads the child pages /article1 /article2 and /article3.
 var myProtocol = location.protocol;
 var myPort     = location.port;
 var myBaseURL  = location.hostname;
