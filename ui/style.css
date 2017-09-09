@@ -30,6 +30,11 @@ body {
     width:  128px;
 }
 
+.img-64x64 {
+  height: 64px;
+  width:  64px;
+}
+
 .cosmo {
     margin:           5px 5px;
     background-color: seashell;
