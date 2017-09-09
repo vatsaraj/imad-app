@@ -101,19 +101,6 @@ function createHtmlTemplate(data) {
   return htmlTemplate;
 }
 
-app.get('/check-login', function(req, res) {
-  if(req.session && req.session.auth && req.session.auth.userId) {
-    res.send('You are logged in as ' + req.session.auth.userId.toString());
-  } else {
-    res.send('You are NOT logged in.');
-  }
-});
-
-app.get('/logout', function(req, res) {
-  delete req.session.auth;
-  res.send('You are logged out.');
-});
-
 var counter = 0;
 app.get('/counter', function(req, res) {
   counter = counter+1;
@@ -128,27 +115,22 @@ var config = {
   password: process.env.DB_PASSWORD
 };
 
-function hashBrowns(passwdConfig) {
-  var hashed = crypto.pbkdf2Sync(passwdConfig.password,
-                                 passwdConfig.essentialSalts,
-                                 passwdConfig.iterations,
-                                 passwdConfig.keylength,
-                                 passwdConfig.digestion);
+function makeHashBrowns(password) {
 
-  return ['pbkdf2', passwdConfig.iterations, passwdConfig.essentialSalts, hashed.toString('hex')].join('$');
+  var algo   = 'pbkdf2';    // Name of the encryption method used to generate a hash.
+  var salt   = '76aee9a464f1dd0381925a7c4cd8d080eb16601f16220aab87a12dafd57aa1c89cf62a0d6284f4d856d88b90aa82b7117ec14dd7431a621b137d163661266dd1';  // The salt to be added to the password hasing process.
+  var iters  = 10000;      // How many times the hashing function is to be run - more the merrier.
+  var keylen = 512;       // Derived key length.
+  var digest = 'sha512';  // Name of the digest algorithm to be used to generate the hash.
+
+  var hashed = crypto.pbkdf2Sync(password, salt, iters, keylen, digest);
+
+  return [algo, iters, salt, hashed.toString('hex')].join('$');
+
 }
 
 app.get('/hash/:input', function(req, res) {
-  var salty        = 'salty-malty';
-  var passwdConfig = { password       : '',
-                       essentialSalts : 'salty-malty-balty',
-                       iterations     : 10000,
-                       keylength      : 512,
-                       digestion      : 'sha512'
-                     };
-
-  config.password  = req.params.input;
-  var hashedString = hashBrowns(passwdConfig);
+  var hashedString = makeHashBrowns(req.params.input);
   res.send(hashedString);
 });
 
@@ -157,7 +139,6 @@ function printThreadPage(content) {
   var bonda = '';
 
   for(var ixx in content) {
-    //console.log(content[ixx].topic);
     bonda = content[ixx].topic;
     output += '<b><a href=\"' + bonda + '\">' + bonda + '</a><hr>';
   }
@@ -172,6 +153,20 @@ function printThreadPage(content) {
 }
 
 var pool = new Pool(config);
+
+app.get('/check-login', function(req, res) {
+  if(req.session && req.session.auth && req.session.auth.userId) {
+    res.send('You are logged in as ' + req.session.auth.userId.toString());
+  } else {
+    res.send('You are NOT logged in.');
+  }
+});
+
+app.get('/logout', function(req, res) {
+  delete req.session.auth;
+  res.send('You are logged out.');
+});
+
 
 app.get('/chat', function(req, res) {
   pool.query('select * from threadz order by threadid', function(err, result) {
@@ -248,48 +243,11 @@ app.get('/:chatName', function(req, res) {
   }); // pool.query('select threadid...
 });
 
-function hashBrowns(cfg) {
-  /* Some parameter validation being done. More rigour required. */
-  if((cfg.password       === undefined) ||
-     (cfg.password.trim().length === 0)) { cfg.password       = crypto.randomBytes(16).toString('hex'); }
-  if(cfg.essentialSalts === undefined) { cfg.essentialSalts = crypto.randomBytes(128).toString('hex'); }
-  if((cfg.iterations    === undefined) ||
-     (cfg.iterations    <=  0))        { cfg.iterations     = 10000; }
-  if((cfg.keylength     === undefined) ||
-     (cfg.keylength     <=  64))       { cfg.keylength      = 512; }
-  if(cfg.digestion      === undefined) { cfg.digestion      = 'sha512'; }
-
-  var hashed = crypto.pbkdf2Sync(cfg.password,
-                                 cfg.essentialSalts,
-                                 cfg.iterations,
-                                 cfg.keylength,
-                                 cfg.digestion);
-
-  return ['pbkdf2', cfg.iterations, cfg.essentialSalts, hashed.toString('hex')].join('$');
-}
-
-app.get('/hash/:input', function(req, res) {
-  var salty        = 'salty-malty';
-  var passwdConfig = { password       : '',
-                       essentialSalts : 'salty-malty-balty',
-                       iterations     : 10000,
-                       keylength      : 512,
-                       digestion      : 'sha512'
-                     };
-
-  config.password  = req.params.input;
-  var hashedString = hashBrowns(passwdConfig);
-  res.send(hashedString);
-});
-
 app.post('/create-user', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  var mittens = { password : password };
-  var hashed  = hashBrowns(mittens);
-
-  //var queryString = 'insert into "users" (username, password) values (\'' + username + '\',\'' + password + '\')';
+  var hashed  = makeHashBrowns(password);
 
   pool.query('insert into "user" (username, password) values($1, $2)', [username, hashed], function(err, result) {
     if(err) {
@@ -309,13 +267,11 @@ app.post('/login', function(req, res) {
       res.status(500).send(err.toString());
     } else {
       if(result.rows.length === 0) {
-        res.status(403).send('Invalid username/password');
+        res.status(403).send('username/password incorrect');
       } else {
         // Match the passwords.
         var dbString    = result.rows[0].password;
-        var getSalty    = dbString.split('$')[2];
-        var mittens = { password : password, essentialSalts : getSalty };
-        var veryifyPass = hashBrowns(mittens);
+        var veryifyPass = makeHashBrowns(password);
 
         if(veryifyPass === dbString) {
           // Set the session.
@@ -325,7 +281,7 @@ app.post('/login', function(req, res) {
           res.status(200).send('credentials accepted');
         } else {
           // Invalid credentials.
-          res.status(403).send('Invalid username/password');
+          res.status(403).send('credentials incorrect');
         }
       }
     }
